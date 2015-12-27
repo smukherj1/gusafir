@@ -1,0 +1,133 @@
+<html>
+<title>Gusafir Web</title>
+<head>
+<style>
+body {
+    background-color: white;
+	font-family: "Segoe UI",Arial,sans-serif;
+}
+
+.top-nav {
+	background-color: #f1f1f1;
+}
+
+.header {
+    margin: 10px 0;
+	background-color: #f1f1f1;
+	padding: 0.01em 16px;
+}
+
+.node-attr {
+	font-size: 14px;
+    font-weight: 400;
+}
+
+.node {
+	font-size: 14px;
+    font-weight: 400;
+}
+
+.node-list {
+    margin: 10px 0;
+	background-color: #f1f1f1;
+	padding: 0.01em 16px;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
+<script>
+var device_map = {{ device_map_str | safe }};
+
+function device_select () {
+	var part_select = document.getElementById("part_select");
+
+	while(part_select.length > 0)
+	{
+		part_select.remove(0);
+	}
+
+	var family_select = document.getElementById("family_select");
+	var family_index = family_select.selectedIndex;
+	if(family_index == -1)
+	{
+		return;
+	}
+
+	var family = family_select.options[family_index].text;
+	var parts = device_map[family];
+
+	for(var i = 0; i < parts.length; i++)
+	{
+		var option = document.createElement("option");
+		option.text = parts[i];
+		option.value = parts[i];
+		part_select.add(option);
+	}
+}
+
+</script>
+</head>
+<body onload="device_select()">
+	<h1>Welcome to Gusafir Web Interface</h1>
+	<hr>
+	<div class="header">
+		<h2>Choose device to load<h2>
+	</div>
+	<hr>
+	<div class="node-list">
+		<h3>Choose from the supported list of families and devices:-<h3>
+			<form action="/" method="post">
+				<table>
+					<tr>
+						<td align="right">
+							<label>Select Family</label>
+						</td>
+						<td align="right">
+							<select id="family_select" name="family" onchange="device_select()">
+								{% for family in device_map %}
+								<option value="{{ family }}">{{ family }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<label>Select Part</label>
+						</td>
+						<td align="right">
+							<select id="part_select" name="part"  onchange="device_select()">
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="Load Device">
+						</td>
+					</tr>
+				</table>
+			</form>
+	</div>
+	<div class="node-list">
+		<h3>Enter a part name directly:-<h3>
+		<form action="/" method="post">
+				<table>
+					<tr>
+						<td align="right">
+							<label>Part Name</label>
+						</td>
+						<td align="right">
+							<input type="text" name="part">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="Load Part">
+						</td>
+					</tr>
+				</table>
+			</form>
+	</div>
+</body>
+</html>

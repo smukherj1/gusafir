@@ -1,0 +1,126 @@
+<html>
+<title>Gusafir Web</title>
+<head>
+<style>
+body {
+    background-color: white;
+	font-family: "Segoe UI",Arial,sans-serif;
+}
+
+.top-nav {
+	background-color: #f1f1f1;
+}
+
+.header {
+    margin: 10px 0;
+	background-color: #f1f1f1;
+	padding: 0.01em 16px;
+}
+
+.node-attr {
+	font-size: 14px;
+    font-weight: 400;
+}
+
+.node {
+	font-size: 14px;
+    font-weight: 400;
+}
+
+.node-list {
+    margin: 10px 0;
+	background-color: #f1f1f1;
+	padding: 0.01em 16px;
+}
+
+a {
+    text-decoration: none;
+}
+</style>
+
+</head>
+<body>
+	<h1>Welcome to Gusafir Web Interface</h1>
+	<hr>
+	<div class="header">
+		<h2>Choose a node to begin traversing<h2>
+	</div>
+	<hr>
+	<div class="node-list">
+		<h3>Enter node parameters:-<h3>
+			<form action="/show" method="get">
+				<table>
+					<tr>
+						<td align="right">
+							<label>Element</label>
+						</td>
+						<td align="right">
+							<select id="elem_select" name="elem">
+								{% for elem in elem_list %}
+								<option value="{{ elem }}">{{ elem }}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<label>X</label>
+						</td>
+						<td align="right">
+							<input type="number" min="0" name="x" required>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<label>Y</label>
+						</td>
+						<td align="right">
+							<input type="number" min="0" name="y" required>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<label>Z</label>
+						</td>
+						<td align="right">
+							<input type="number" min="0" name="z" required>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">
+							<label>I</label>
+						</td>
+						<td align="right">
+							<input type="number" min="0" name="i" required>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="Lookup RE">
+						</td>
+					</tr>
+				</table>
+			</form>
+	</div>
+	<div class="node-list">
+		<h3>Enter a GID directly:-<h3>
+		<form action="/show" method="get">
+				<table>
+					<tr>
+						<td align="right">
+							<label>GID</label>
+						</td>
+						<td align="right">
+							<input type="number" min="0" name="gid" required>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="Show GID">
+						</td>
+					</tr>
+				</table>
+			</form>
+	</div>
+</body>
+</html>
