@@ -7,6 +7,11 @@ body {
 	font-family: "Segoe UI",Arial,sans-serif;
 }
 
+td {
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
 .top-nav {
 	background-color: #f1f1f1;
 }
@@ -18,7 +23,7 @@ body {
 }
 
 .node-attr {
-	font-size: 14px;
+	font-size: 16px;
     font-weight: 400;
 }
 
@@ -39,49 +44,75 @@ a {
 </style>
 </head>
 <body>
-	<h1>Welcome to Gusafir Web Interface</h1>
+	<h1>Welcome to Gusafir 2.0</h1>
 	<p> Quartus II 16.0 Build 109</p>
 	<div class="top-nav">
-		<a href="/new">New Node</a>
+		<a href="/">New Node</a>
 	</div>
 	<hr>
 	<div class="header">
 		<h2>You are at...<h2>
 		<div class="node-attr">
-			<strong>GID</strong> 500
+			<strong>GID</strong> {{ node.gid() }}
 		</div>
 		<div class="node-attr">
-			<strong>Name</strong> INPUT_X0Y0Z0_I100
+			<strong>Name</strong> {{ node.name() }}
 		</div>
+		{% if node.rtl() %}
 		<div class="node-attr">
-			<strong>RTL (mux)</strong> u0_100/x0/x1/la_lab_r145_c31/ileim[32]:muxout
+			<strong>RTL (mux)</strong> {{ node.rtl() }}
 		</div>
+		{% endif %}
 	</div>
 	<hr>
 	<h2>With the following connectivity</h2>
 	<div class="node-list">
-		<h3>Fanouts:-<h3>
-		<div class="node">
-			<a href="/?get=0">GID:0 NODE_X0Y0Z0I0</a>
-		</div>
-		<div class="node">
-			<a href="/?get=1">GID:1 NODE_X0Y0Z0I1</a>
-		</div>
-		<div class="node">
-			<a href="/?get=2">GID:2 NODE_X0Y0Z0I2</a>
-		</div>
+		{% if num_fanouts %}
+		<h3>Fanouts ({{ num_fanouts }}):-<h3>
+			{% for fanout in node.fanouts() %}
+				<div class="node">
+				<table>
+					<tr>
+						<td>
+							<a href="/show?gid={{ fanout.gid() }}">{{ fanout.gid() }}</a>
+						</td>
+						<td>
+							{{ fanout.name() }}
+						</td>
+						<td>
+							{{ fanout.rtl() }}
+						</td>
+					</tr>
+				</table>
+				</div>
+			{% endfor %}
+		{% else %}
+		<h3>No fanouts!</h3>
+		{% endif %}
 	</div>
 	<div class="node-list">
-		<h3>Fanins:-<h3>
-		<div class="node">
-			<a href="/?get=0">GID:0 NODE_X0Y0Z0I0</a>
-		</div>
-		<div class="node">
-			<a href="/?get=1">GID:1 NODE_X0Y0Z0I1</a>
-		</div>
-		<div class="node">
-			<a href="/?get=2">GID:2 NODE_X0Y0Z0I2</a>
-		</div>
+		{% if num_fanins %}
+		<h3>Fanins ({{ num_fanins }}):-<h3>
+			{% for fanin in node.fanins() %}
+				<div class="node">
+				<table>
+					<tr>
+						<td>
+							<a href="/show?gid={{ fanin.gid() }}">{{ fanin.gid() }}</a>
+						</td>
+						<td>
+							{{ fanin.name() }}
+						</td>
+						<td>
+							{{ fanin.rtl() }}
+						</td>
+					</tr>
+				</table>
+				</div>
+			{% endfor %}
+		{% else %}
+		<h3>No fanins!</h3>
+		{% endif %}
 	</div>
 </body>
 </html>

@@ -67,10 +67,65 @@ function device_select () {
 	}
 }
 
+function device_load_submit () {
+	var part_select = document.getElementById("part_select");
+	var index = part_select.selectedIndex;
+
+	if(index == -1)
+	{
+		return;
+	}
+
+	var part = part_select.options[index].text;
+
+	alert("Loading " + part + ". This may take a minute or two. The page will automatically refresh when done");
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200)
+		{
+			window.location.href = "/";
+		}
+		else if(xhttp.readyState == 4)
+		{
+			alert("Server indicated that it failed to load the device :(");
+		}
+  	}
+  	xhttp.open("POST", "/", true);
+  	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  	xhttp.send("part=" + part);
+
+}
+
+function part_load_submit () {
+	var part = document.getElementById("direct_part_name").text;
+
+	if(typeof part === 'undefined')
+	{
+		return;
+	}
+
+	alert("Loading " + part + ". This may take a minute or two. The page will automatically refresh when done");
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200)
+		{
+			window.location.href = "/";
+		}
+		else if(xhttp.readyState == 4)
+		{
+			alert("Server indicated that it failed to load the device :(");
+		}
+  	}
+  	xhttp.open("POST", "/", true);
+  	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  	xhttp.send("part=" + part);
+}
+
+
 </script>
 </head>
 <body onload="device_select()">
-	<h1>Welcome to Gusafir Web Interface</h1>
+	<h1>Welcome to Gusafir 2.0</h1>
 	<hr>
 	<div class="header">
 		<h2>Choose device to load<h2>
@@ -78,7 +133,7 @@ function device_select () {
 	<hr>
 	<div class="node-list">
 		<h3>Choose from the supported list of families and devices:-<h3>
-			<form action="/" method="post">
+			<form action="/" method="get" onsubmit="return false;">
 				<table>
 					<tr>
 						<td align="right">
@@ -103,7 +158,7 @@ function device_select () {
 					</tr>
 					<tr>
 						<td>
-							<input type="submit" value="Load Device">
+							<input type="submit" value="Load Device" onclick="device_load_submit()">
 						</td>
 					</tr>
 				</table>
@@ -111,19 +166,19 @@ function device_select () {
 	</div>
 	<div class="node-list">
 		<h3>Enter a part name directly:-<h3>
-		<form action="/" method="post">
+		<form action="/" method="get" onsubmit="return false;">
 				<table>
 					<tr>
 						<td align="right">
 							<label>Part Name</label>
 						</td>
 						<td align="right">
-							<input type="text" name="part">
+							<input id="direct_part_name" type="text" name="part" required>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="submit" value="Load Part">
+							<input type="submit" value="Load Part" onclick="part_load_submit()">
 						</td>
 					</tr>
 				</table>

@@ -1,3 +1,6 @@
+from threading import Lock
+_device_loader_lock = Lock()
+
 
 class Node:
 	def __init__(self, gid, name, rtl_name, fanins=[], fanouts=[]):
@@ -29,9 +32,13 @@ class DeviceInterface:
 		return
 
 	def load(self, part):
-		assert(not self.__loaded)
-		self.__loaded = True
-		self.__part = part
+		_device_loader_lock.acquire()
+		try:
+			if not self.__loaded:
+				self.__part = part
+				self.__loaded = True
+		finally:
+			_device_loader_lock.release()
 		return
 
 	def loaded(self):
@@ -49,3 +56,23 @@ class DeviceInterface:
 		"ELEM3",
 		"ELEM4"
 		]
+
+	def lookup(self, elem, x, y, z, i):
+		gid = int(x) * 1000 + int(y) * 100 + int(z) * 10 + int(i)
+		return self.getNode(gid)
+
+	def getNode(self, gid):
+		n = Node(gid, 'FAKE', 'fakemux:muxout', 
+				[
+					Node(gid + 1, 'FAKE_FANIN', 'imux:muxout'),
+					Node(gid + 2, 'FAKE_FANIN', 'imux:muxout'),
+					Node(gid + 3, 'FAKE_FANIN', 'imux:muxout'),
+				],
+				[
+					Node(gid + 4, 'FAKE_FANOUT', 'omux:muxout'),
+					Node(gid + 5, 'FAKE_FANOUT', 'omux:muxout'),
+					Node(gid + 6, 'FAKE_FANOUT', 'omux:muxout'),
+					Node(gid + 7, 'FAKE_FANOUT', 'omux:muxout')
+				]
+			)
+		return n

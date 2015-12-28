@@ -7,7 +7,37 @@ _global_Device = DeviceInterface()
 
 class NodePage(Handler):
     def get(self):
-        return self.response.write('Showing node!')
+        if not _global_Device.loaded():
+            print 'Device not yet loaded!'
+            return self.redirect('/')
+
+        gid = str(self.request.get('gid')).strip()
+        if gid and gid.isdigit():
+            node = _global_Device.getNode(int(gid))
+            return self.render('show.html', node=node,
+                num_fanins=len(node.fanins()),
+                num_fanouts=len(node.fanouts()))
+
+        elem = str(self.request.get('elem')).strip()
+        x = str(self.request.get('x'))
+        y = str(self.request.get('y'))
+        z = str(self.request.get('z'))
+        i = str(self.request.get('i'))
+
+        if elem and x and x.isdigit() \
+            and y and y.isdigit() \
+            and z and z.isdigit() \
+            and i and i.isdigit():
+            node = _global_Device.lookup(elem,
+                int(x),
+                int(y),
+                int(z),
+                int(i))
+            return self.render('show.html', node=node,
+                num_fanins=len(node.fanins()),
+                num_fanouts=len(node.fanouts()))
+
+        return self.redirect('/')
 
 class MainPage(Handler):
     def renderDeviceLoader(self):
