@@ -3,7 +3,7 @@ import time
 import json
 import re
 
-XYZI_RE = re.compile(r'NODE_X(\d+)Y(\d+)Z(\d+)I(\d+)')
+XYZI_RE = re.compile(r'[a-zA-Z]+_X(\d+)Y(\d+)Z(\d+)I(\d+)')
 _device_loader_lock = Lock()
 
 
@@ -79,10 +79,18 @@ class DeviceInterface:
 		return [ "CLOCK", "LAB", "WIRE"]
 
 	def getLocs(self, elem):
-		locs = []
+		locs = {}
 		for inode in self.__nodes:
-			if inode.name().startswith(elem.upper()):
-				locs.append(inode.name())
+			if not inode.name().startswith(elem.upper()):
+				continue
+			x, y, z, i = parseNodeName(inode.name())
+			if x not in locs:
+				locs[x] = {}
+			if y not in locs[x]:
+				locs[x][y] = {}
+			if z not in locs[x][y]:
+				locs[x][y][z] = []
+			locs[x][y][z].append(i)
 		return locs
 
 	def lookup(self, elem, x, y, z, i):

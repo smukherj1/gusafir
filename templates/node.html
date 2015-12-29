@@ -2,8 +2,9 @@
 <title>Gusafir 2.0</title>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<script type="text/javascript" src="node.js"></script>
 </head>
-<body>
+<body onload="elem_selectcb()">
 	<h1>Welcome to Gusafir 2.0</h1>
 	<p>Quartus Build: {{ acds_dest_root }}</p>
 	<div class="error-header">{{ error_header }}</div>
@@ -13,7 +14,7 @@
 	</div>
 	<hr>
 	<div class="node-list">
-		<h3>Enter node parameters:-<h3>
+		<h3>Enter node parameters to lookup:-<h3>
 			<form action="/show" method="get">
 				<table>
 					<tr>
@@ -87,6 +88,75 @@
 					</tr>
 				</table>
 			</form>
+	</div>
+	<div class="node-list">
+		<h3>Interactively lookup a node:-<h3>
+		<p>
+			Here the webpage will attempt to auto fill the X, Y, Z and I options based on your selections.
+			For example, when you select an element, only legal X coordinates will be shown. When you select
+			elem, X and Y, only legal Z coordinates will be shown.
+		</p>
+		<p>
+			Please note that the auto population will take some time (few seconds) based on how many elements 
+			there are of a particular type.
+		</p>
+		<form action="/show" method="get">
+			<table>
+				<tr>
+					<td align="right">
+						<label>Element</label>
+					</td>
+					<td align="right">
+						<select id="elem_select" name="elem" onchange="elem_selectcb()">
+							{% for elem in elem_list %}
+							<option value="{{ elem }}">{{ elem }}</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label>X</label>
+					</td>
+					<td align="right">
+						<select id="x_select" name="x" onchange="x_selectcb()">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label>Y</label>
+					</td>
+					<td align="right">
+						<select id="y_select" name="y" onchange="y_selectcb()">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label>Z</label>
+					</td>
+					<td align="right">
+						<select id="z_select" name="z" onchange="z_selectcb()">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<label>I</label>
+					</td>
+					<td align="right">
+						<select id="i_select" name="i">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" value="Lookup">
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
 </body>
 </html>
