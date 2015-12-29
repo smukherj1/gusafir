@@ -4,6 +4,7 @@ import time
 import os
 import urllib2
 import uuid
+import atexit
 
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -16,6 +17,11 @@ if __name__ == '__main__':
     print 'Info: Welcome to Gusafir 2.0'
     print 'Info: Attemping to start the Gusafir Server. We will attempt 10 different ports before giving up.'
     p = None
+
+    def cleanup():
+        if p:
+            p.kill()
+    atexit.register(cleanup)
     for iport in range(PORT, PORT + 10):
         addr = 'http://%s:%d'%(HOST, iport)
         print 'Info: Attemping to start the Gusafir Server on %s'%addr

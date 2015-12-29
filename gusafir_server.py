@@ -63,8 +63,9 @@ class MainPage(Handler):
     def post(self):
         part = str(self.request.get('part')).strip()
         if part:
-            print 'Loading part', part
+            print 'Info: Loading part', part
             _global_Device.load(part)
+            print 'Info: Device loading complete.'
         return self.redirect('/')
 
 class TestPage(Handler):
