@@ -1,5 +1,9 @@
 from threading import Lock
 import time
+import json
+import re
+
+XYZI_RE = re.compile(r'NODE_X(\d+)Y(\d+)Z(\d+)I(\d+)')
 _device_loader_lock = Lock()
 
 
@@ -26,10 +30,28 @@ class Node:
 	def fanouts(self):
 		return self.__fanouts
 
+def parseNodeName(name):
+	match = XYZI_RE.match(name)
+	x = int(match.group(1))
+	y = int(match.group(2))
+	z = int(match.group(3))
+	i = int(match.group(4))
+	return x, y, z, i
+
 class DeviceInterface:
 	def __init__(self):
 		self.__loaded = False
 		self.__part = None
+		self.__nodes = []
+		return
+
+	def __load(self):
+		f_in = open('device.json')
+		nodes = json.load(f_in)
+		for iraw_node in nodes:
+			n = Node(**iraw_node)
+			assert(n.gid() == len(self.__nodes))
+			self.__nodes.append(n)
 		return
 
 	def load(self, part):
@@ -37,8 +59,9 @@ class DeviceInterface:
 		try:
 			if not self.__loaded:
 				self.__part = part
+				self.__load()
 				self.__loaded = True
-				time.sleep(5)
+				#time.sleep(5)
 		finally:
 			_device_loader_lock.release()
 		return
@@ -53,31 +76,30 @@ class DeviceInterface:
 		}
 
 	def getElems(self):
-		return [ "ELEM1",
-		"ELEM2",
-		"ELEM3",
-		"ELEM4"
-		]
+		return [ "CLOCK", "LAB", "WIRE"]
+
+	def getLocs(self, elem):
+		locs = []
+		for inode in self.__nodes:
+			if inode.name().startswith(elem.upper()):
+				locs.append(inode.name())
+		return locs
 
 	def lookup(self, elem, x, y, z, i):
-		gid = int(x) * 1000 + int(y) * 100 + int(z) * 10 + int(i)
-		if gid < 10000:
-			return self.getNode(gid)
-		else:
-			return None
+		for inode in self.__nodes:
+			ix, iy, iz, ii = parseNodeName(inode.name())
+			if ix == x and iy == y and iz == z and ii == i:
+				return self.getNode(inode.gid())
+		return
 
 	def getNode(self, gid):
-		n = Node(gid, 'FAKE', 'fakemux:muxout', 
-				[
-					Node(gid + 1, 'FAKE_FANIN', 'imux:muxout'),
-					Node(gid + 2, 'FAKE_FANIN', 'imux:muxout'),
-					Node(gid + 3, 'FAKE_FANIN', 'imux:muxout'),
-				],
-				[
-					Node(gid + 4, 'FAKE_FANOUT', 'omux:muxout'),
-					Node(gid + 5, 'FAKE_FANOUT', 'omux:muxout'),
-					Node(gid + 6, 'FAKE_FANOUT', 'omux:muxout'),
-					Node(gid + 7, 'FAKE_FANOUT', 'omux:muxout')
-				]
-			)
-		return n
+		if gid >= 0 and gid < len(self.__nodes):
+			fanins = []
+			fanouts = []
+			for ifanin in self.__nodes[gid].fanins():
+				fanins.append(Node(ifanin, self.__nodes[ifanin].name(), self.__nodes[ifanin].rtl()))
+			for ifanout in self.__nodes[gid].fanouts():
+				fanouts.append(Node(ifanout, self.__nodes[ifanout].name(), self.__nodes[ifanout].rtl()))
+			node = Node(self.__nodes[gid].gid(), self.__nodes[gid].name(), self.__nodes[gid].rtl(), fanins, fanouts)
+			return node
+		return

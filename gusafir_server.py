@@ -10,6 +10,16 @@ from socket import error as SocketError
 
 _global_Device = DeviceInterface()
 
+class ElemsList(Handler):
+    def get(self):
+        if not _global_Device.loaded():
+            return self.response.write('[]')
+        elem = str(self.request.get('elem')).strip()
+        if not elem:
+            return self.response.write('[]')
+        result = json.dumps(_global_Device.getLocs(elem))
+        return self.response.write(result)
+
 class NodePage(Handler):
     def get(self):
         if not _global_Device.loaded():
@@ -43,7 +53,8 @@ class NodePage(Handler):
                     num_fanins=len(node.fanins()),
                     num_fanouts=len(node.fanouts()))
 
-        return self.render('node.html', error_header='Could not find that node')
+        return self.render('node.html', error_header='Could not find that node',
+            elem_list = _global_Device.getElems())
 
 class MainPage(Handler):
     def renderDeviceLoader(self):
@@ -83,7 +94,8 @@ def main():
     web_app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/show', NodePage),
-    ('/%s'%testpage, TestPage)
+    ('/%s'%testpage, TestPage),
+    ('/elems', ElemsList)
         ], debug=True)
     static_app = StaticURLParser("static/")
 
