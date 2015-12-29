@@ -1,4 +1,5 @@
 from threading import Lock
+import time
 _device_loader_lock = Lock()
 
 
@@ -37,6 +38,7 @@ class DeviceInterface:
 			if not self.__loaded:
 				self.__part = part
 				self.__loaded = True
+				time.sleep(5)
 		finally:
 			_device_loader_lock.release()
 		return
@@ -59,7 +61,10 @@ class DeviceInterface:
 
 	def lookup(self, elem, x, y, z, i):
 		gid = int(x) * 1000 + int(y) * 100 + int(z) * 10 + int(i)
-		return self.getNode(gid)
+		if gid < 10000:
+			return self.getNode(gid)
+		else:
+			return None
 
 	def getNode(self, gid):
 		n = Node(gid, 'FAKE', 'fakemux:muxout', 

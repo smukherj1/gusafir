@@ -4,6 +4,8 @@ from device import DeviceInterface
 import json
 import sys
 from paste import httpserver
+from paste.urlparser import StaticURLParser
+from paste.cascade import Cascade
 from socket import error as SocketError
 
 _global_Device = DeviceInterface()
@@ -12,7 +14,7 @@ class NodePage(Handler):
     def get(self):
         if not _global_Device.loaded():
             print 'Device not yet loaded!'
-            return self.redirect('/')
+            return self.response.write('The Device is still loading! Please refresh after a minute or two.')
 
         gid = str(self.request.get('gid')).strip()
         if gid and gid.isdigit():
@@ -36,11 +38,12 @@ class NodePage(Handler):
                 int(y),
                 int(z),
                 int(i))
-            return self.render('show.html', node=node,
-                num_fanins=len(node.fanins()),
-                num_fanouts=len(node.fanouts()))
+            if node:
+                return self.render('show.html', node=node,
+                    num_fanins=len(node.fanins()),
+                    num_fanouts=len(node.fanouts()))
 
-        return self.redirect('/')
+        return self.render('node.html', error_header='Could not find that node')
 
 class MainPage(Handler):
     def renderDeviceLoader(self):
@@ -77,11 +80,16 @@ def main():
     port = sys.argv[2]
     testpage = sys.argv[3]
 
-    app = webapp2.WSGIApplication([
+    web_app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/show', NodePage),
     ('/%s'%testpage, TestPage)
         ], debug=True)
+    static_app = StaticURLParser("static/")
+
+    # Create a cascade that looks for static files first, then tries the webapp
+    app = Cascade([static_app, web_app])
+
     try:
         httpserver.serve(app, host=sys.argv[1], port=sys.argv[2])
     except SocketError:

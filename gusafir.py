@@ -9,7 +9,7 @@ import atexit
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SERVER_SCRIPT = os.path.join(SCRIPT_DIR, 'gusafir_server.py')
-HOST = 'localhost'
+HOST = '0.0.0.0'
 PORT = 8080
 TEST_PAGE = str(uuid.uuid1())
 

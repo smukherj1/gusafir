@@ -12,4 +12,7 @@ class Handler(webapp2.RequestHandler):
 		return t.render(params)
 
 	def render(self, template, **kw):
-		self.response.write(self.render_str(template, **kw))
+		acds_dest_root = str(os.environ.get('ACDS_DEST_ROOT'))
+		self.response.write(self.render_str(template,
+				acds_dest_root=acds_dest_root,
+				**kw))

@@ -1,51 +1,12 @@
 <html>
-<title>Gusafir Web</title>
+<title>Gusafir 2.0</title>
 <head>
-<style>
-body {
-    background-color: white;
-	font-family: "Segoe UI",Arial,sans-serif;
-}
-
-td {
-	padding-right: 10px;
-	padding-left: 10px;
-}
-
-.top-nav {
-	background-color: #f1f1f1;
-}
-
-.header {
-    margin: 10px 0;
-	background-color: #f1f1f1;
-	padding: 0.01em 16px;
-}
-
-.node-attr {
-	font-size: 16px;
-    font-weight: 400;
-}
-
-.node {
-	font-size: 14px;
-    font-weight: 400;
-}
-
-.node-list {
-    margin: 10px 0;
-	background-color: #f1f1f1;
-	padding: 0.01em 16px;
-}
-
-a {
-    text-decoration: none;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
 	<h1>Welcome to Gusafir 2.0</h1>
-	<p> Quartus II 16.0 Build 109</p>
+	<p>Quartus Build: {{ acds_dest_root }}</p>
+	<div class="error-header">{{ error_header }}</div>
 	<div class="top-nav">
 		<a href="/">New Node</a>
 	</div>
