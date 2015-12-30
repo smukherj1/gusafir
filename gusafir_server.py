@@ -25,8 +25,8 @@ class ElemsList(Handler):
 class NodePage(Handler):
     def get(self):
         if not _global_Device.loaded():
-            print 'Device not yet loaded!'
-            return self.response.write('The Device is still loading! Please refresh after a minute or two.')
+            print 'Warning: New Node page requested but device not yet loaded!'
+            return self.redirect('/')
 
         gid = str(self.request.get('gid')).strip()
         if gid and gid.isdigit():

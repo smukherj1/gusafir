@@ -6,7 +6,7 @@ COLS = 100
 
 _global_Nodes = []
 _global_coord_idx_map = {}
-NODE_TYPES = ["CLOCK", "LAB", "WIRE"]
+NODE_TYPES = ["CLOCK", "LAB", "HWIRE", "VWIRE", "IO"]
 
 def genNodes(rows, cols):
 	for ir in range(rows):
