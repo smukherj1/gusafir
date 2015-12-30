@@ -76,7 +76,7 @@ class DeviceInterface:
 		}
 
 	def getElems(self):
-		return [ "CLOCK", "LAB", "WIRE"]
+		return ["CLOCK", "LAB", "HWIRE", "VWIRE", "IO"]
 
 	def getLocs(self, elem):
 		locs = {}
@@ -96,7 +96,7 @@ class DeviceInterface:
 	def lookup(self, elem, x, y, z, i):
 		for inode in self.__nodes:
 			ix, iy, iz, ii = parseNodeName(inode.name())
-			if ix == x and iy == y and iz == z and ii == i:
+			if inode.name().startswith(elem) and ix == x and iy == y and iz == z and ii == i:
 				return self.getNode(inode.gid())
 		return
 

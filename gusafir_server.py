@@ -8,12 +8,17 @@ from paste.urlparser import StaticURLParser
 from paste.cascade import Cascade
 from socket import error as SocketError
 import os
+import logging
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _global_Device = DeviceInterface()
+_log = logging.getLogger(__name__)
+logging.basicConfig(format='[%(asctime)s][%(levelname)s]   %(message)s', level=logging.INFO)
+TEST_PAGE = 'test'
 
 class ElemsList(Handler):
     def get(self):
+        _log.info('GET /elems?elem=%s'%self.request.get('elem'))
         if not _global_Device.loaded():
             return self.response.write('[]')
         elem = str(self.request.get('elem')).strip()
@@ -24,8 +29,14 @@ class ElemsList(Handler):
 
 class NodePage(Handler):
     def get(self):
+        _log.info('GET /show?gid=%s&elem=%s&x=%s&y=%s&z=%s&i=%s'%(self.request.get('gid'),
+            self.request.get('elem'),
+            self.request.get('x'),
+            self.request.get('y'),
+            self.request.get('z'),
+            self.request.get('i')))
         if not _global_Device.loaded():
-            print 'Warning: New Node page requested but device not yet loaded!'
+            _log.warning('New Node page requested but device not yet loaded!')
             return self.redirect('/')
 
         gid = str(self.request.get('gid')).strip()
@@ -71,27 +82,39 @@ class MainPage(Handler):
             elem_list = _global_Device.getElems())
 
     def get(self):
+        _log.info('GET /')
         if not _global_Device.loaded():
             return self.renderDeviceLoader()
         else:
             return self.renderNewNode()
 
     def post(self):
+        _log.info('POST /')
         part = str(self.request.get('part')).strip()
         if part:
-            print 'Info: Loading part', part
+            _log.info('Loading device %s'%part)
             _global_Device.load(part)
-            print 'Info: Device loading complete.'
+            _log.info('Finished loading device')
         return self.redirect('/')
+
+class TestPage(Handler):
+    def get(self):
+        _log.info('GET /%s'%TEST_PAGE)
+        return self.response.write('OK')
 
 
 def main():
     host = sys.argv[1]
     port = sys.argv[2]
+    global TEST_PAGE
+
+    if len(sys.argv) > 3:
+        TEST_PAGE = sys.argv[3]
 
     web_app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/show', NodePage),
+    ('/%s'%TEST_PAGE, TestPage),
     ('/elems', ElemsList)
         ], debug=True)
     static_app = StaticURLParser((os.path.join(SCRIPT_DIR, "static")))
@@ -101,7 +124,7 @@ def main():
     try:
         httpserver.serve(app, host=host, port=port)
     except SocketError:
-        print 'Error: Failed to start webserver at http://%s:%s'%(sys.argv[1], sys.argv[2])
+        _log.error('Failed to start webserver at http://%s:%s'%(host, port))
         exit(-1)
 
 if __name__ == '__main__':
