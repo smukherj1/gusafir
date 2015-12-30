@@ -52,7 +52,8 @@ function device_load_submit () {
   	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   	xhttp.send("part=" + part);
 
-  	document.body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
+  	var loader_body = document.getElementById("loader_body");
+  	loader_body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
 
 }
 
@@ -80,5 +81,6 @@ function part_load_submit () {
   	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   	xhttp.send("part=" + part);
 
-  	document.body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
+  	var loader_body = document.getElementById("loader_body");
+  	loader_body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
 }

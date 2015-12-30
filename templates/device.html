@@ -1,74 +1,76 @@
 <html>
 <title>Gusafir 2.0</title>
 <head>
-<link rel="stylesheet" type="text/css" href="main.css">
-<link rel="stylesheet" type="text/css" href="spinner.css">
-<script>
-var device_map = {{ device_map_str | safe }};
-</script>
-<script type="text/javascript" src="device.js"></script>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="spinner.css">
+	<script>
+	var device_map = {{ device_map_str | safe }};
+	</script>
+	<script type="text/javascript" src="device.js"></script>
 </head>
 <body onload="device_select()">
 	<h1>Welcome to Gusafir 2.0</h1>
 	<p>Quartus Build: {{ acds_dest_root }}</p>
 	<div class="error-header">{{ error_header }}</div>
 	<hr>
-	<div class="header">
-		<h2>Choose device to load<h2>
-	</div>
-	<hr>
-	<div class="node-list">
-		<h3>Choose from the supported list of families and devices:-<h3>
-			<form action="/" method="get" onsubmit="return false;">
-				<table>
-					<tr>
-						<td align="right">
-							<label>Select Family</label>
-						</td>
-						<td align="right">
-							<select id="family_select" name="family" onchange="device_select()">
-								{% for family in device_map %}
-								<option value="{{ family }}">{{ family }}</option>
-								{% endfor %}
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td align="right">
-							<label>Select Part</label>
-						</td>
-						<td align="right">
-							<select id="part_select" name="part">
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="submit" value="Load Device" onclick="device_load_submit()">
-						</td>
-					</tr>
-				</table>
-			</form>
-	</div>
-	<div class="node-list">
-		<h3>Enter a part name directly:-<h3>
-		<form action="/" method="get" onsubmit="return false;">
-				<table>
-					<tr>
-						<td align="right">
-							<label>Part Name</label>
-						</td>
-						<td align="right">
-							<input id="direct_part_name" type="text" name="part" required>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="submit" value="Load Part" onclick="part_load_submit()">
-						</td>
-					</tr>
-				</table>
-			</form>
-	</div>
-</body>
-</html>
+	<div id="loader_body">
+		<div class="header">
+			<h2>Choose device to load<h2>
+			</div>
+			<hr>
+			<div class="node-list">
+				<h3>Choose from the supported list of families and devices:-<h3>
+					<form action="/" method="get" onsubmit="return false;">
+						<table>
+							<tr>
+								<td align="right">
+									<label>Select Family</label>
+								</td>
+								<td align="right">
+									<select id="family_select" name="family" onchange="device_select()">
+										{% for family in device_map %}
+										<option value="{{ family }}">{{ family }}</option>
+										{% endfor %}
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+									<label>Select Part</label>
+								</td>
+								<td align="right">
+									<select id="part_select" name="part">
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="submit" value="Load Device" onclick="device_load_submit()">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="node-list">
+					<h3>Enter a part name directly:-<h3>
+						<form action="/" method="get" onsubmit="return false;">
+							<table>
+								<tr>
+									<td align="right">
+										<label>Part Name</label>
+									</td>
+									<td align="right">
+										<input id="direct_part_name" type="text" name="part" required>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" value="Load Part" onclick="part_load_submit()">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</body>
+			</html>

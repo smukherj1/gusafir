@@ -2,51 +2,100 @@
 <title>Gusafir 2.0</title>
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
+<style>
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: white;
+}
+
+th {
+    height: 50px;
+} 
+
+
+th, td {
+	padding: 15px;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
+
+</style>
 </head>
 <body>
 	<h1>Welcome to Gusafir 2.0</h1>
 	<p>Quartus Build: {{ acds_dest_root }}</p>
 	<div class="error-header">{{ error_header }}</div>
 	<div class="top-nav">
-		<a href="/">New Node</a>
+		<a href="/">Click here to start traversing another Node</a>
 	</div>
 	<hr>
 	<div class="header">
 		<h2>You are at...<h2>
-		<div class="node-attr">
-			<strong>GID</strong> {{ node.gid() }}
-		</div>
-		<div class="node-attr">
-			<strong>Name</strong> {{ node.name() }}
-		</div>
-		{% if node.rtl() %}
-		<div class="node-attr">
-			<strong>RTL (mux)</strong> {{ node.rtl() }}
-		</div>
-		{% endif %}
+		<table>
+			<tr>
+				<td style="background-color: #ffd1b3;color: #602020">
+					<strong>GID</strong>
+				</td>
+				<td>
+					{{ node.gid() }}
+				</td>
+			</tr>
+			<tr>
+				<td style="background-color: #ffd1b3;color: #602020">
+					<strong>Name</strong>
+				</td>
+				<td>
+					{{ node.name() }}
+				</td>
+			</tr>
+			{% if node.rtl() %}
+			<tr>
+				<td style="background-color: #ffd1b3;color: #602020">
+					<strong>RTL (mux)</strong>
+				</td>
+				<td>
+					{{ node.rtl() }}
+				</td>
+			</tr>
+			{% endif %}
+		</table>
 	</div>
 	<hr>
 	<h2>With the following connectivity</h2>
 	<div class="node-list">
 		{% if num_fanouts %}
 		<h3>Fanouts ({{ num_fanouts }}):-<h3>
-			{% for fanout in node.fanouts() %}
-				<div class="node">
-				<table>
-					<tr>
-						<td>
-							<a href="/show?gid={{ fanout.gid() }}">{{ fanout.gid() }}</a>
-						</td>
-						<td>
-							{{ fanout.name() }}
-						</td>
-						<td>
-							{{ fanout.rtl() }}
-						</td>
-					</tr>
-				</table>
-				</div>
-			{% endfor %}
+			<table>
+				<tr style="background-color: #4CAF50;color: white">
+					<td>
+						<strong>GID (Link to Node)</strong>
+					</td>
+					<td>
+						<strong>RE Name</strong>
+					</td>
+					<td>
+						<strong>RTL Name</strong>
+					</td>
+				</tr>
+				{% for fanout in node.fanouts() %}
+				<tr>
+					<td>
+						<a href="/show?gid={{ fanout.gid() }}">{{ fanout.gid() }}</a>
+					</td>
+					<td>
+						{{ fanout.name() }}
+					</td>
+					<td>
+						{{ fanout.rtl() }}
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
 		{% else %}
 		<h3>No fanouts!</h3>
 		{% endif %}
@@ -54,23 +103,32 @@
 	<div class="node-list">
 		{% if num_fanins %}
 		<h3>Fanins ({{ num_fanins }}):-<h3>
-			{% for fanin in node.fanins() %}
-				<div class="node">
-				<table>
-					<tr>
-						<td>
-							<a href="/show?gid={{ fanin.gid() }}">{{ fanin.gid() }}</a>
-						</td>
-						<td>
-							{{ fanin.name() }}
-						</td>
-						<td>
-							{{ fanin.rtl() }}
-						</td>
-					</tr>
-				</table>
-				</div>
-			{% endfor %}
+			<table>
+				<tr style="background-color: #4CAF50;color: white">
+					<td>
+						<strong>GID (Link to Node)</strong>
+					</td>
+					<td>
+						<strong>RE Name</strong>
+					</td>
+					<td>
+						<strong>RTL Name</strong>
+					</td>
+				</tr>
+				{% for fanin in node.fanins() %}
+				<tr>
+					<td>
+						<a href="/show?gid={{ fanin.gid() }}">{{ fanin.gid() }}</a>
+					</td>
+					<td>
+						{{ fanin.name() }}
+					</td>
+					<td>
+						{{ fanin.rtl() }}
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
 		{% else %}
 		<h3>No fanins!</h3>
 		{% endif %}

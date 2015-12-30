@@ -3,6 +3,31 @@
 <head>
 <link rel="stylesheet" type="text/css" href="main.css">
 <script type="text/javascript" src="node.js"></script>
+<style>
+table {
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th {
+    height: 50px;
+} 
+
+
+th, td {
+	padding: 15px;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+select {
+	width: 100%;
+}
+
+input {
+	width: 100%;
+}
+
+</style>
 </head>
 <body onload="elem_selectcb()">
 	<h1>Welcome to Gusafir 2.0</h1>
@@ -91,12 +116,10 @@
 	</div>
 	<div class="node-list">
 		<h3>Interactively lookup a node:-<h3>
-		<p>
+		<p style="font-size: 14px">
 			Here the webpage will attempt to auto fill the X, Y, Z and I options based on your selections.
 			For example, when you select an element, only legal X coordinates will be shown. When you select
 			elem, X and Y, only legal Z coordinates will be shown.
-		</p>
-		<p>
 			Please note that the auto population will take some time (few seconds) based on how many elements 
 			there are of a particular type.
 		</p>
