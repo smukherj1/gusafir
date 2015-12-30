@@ -7,7 +7,9 @@ from paste import httpserver
 from paste.urlparser import StaticURLParser
 from paste.cascade import Cascade
 from socket import error as SocketError
+import os
 
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _global_Device = DeviceInterface()
 
 class ElemsList(Handler):
@@ -82,28 +84,22 @@ class MainPage(Handler):
             print 'Info: Device loading complete.'
         return self.redirect('/')
 
-class TestPage(Handler):
-    def get(self):
-        return self.response.write('OK')
 
 def main():
     host = sys.argv[1]
     port = sys.argv[2]
-    testpage = sys.argv[3]
 
     web_app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/show', NodePage),
-    ('/%s'%testpage, TestPage),
     ('/elems', ElemsList)
         ], debug=True)
-    static_app = StaticURLParser("static/")
+    static_app = StaticURLParser((os.path.join(SCRIPT_DIR, "static")))
 
     # Create a cascade that looks for static files first, then tries the webapp
     app = Cascade([static_app, web_app])
-
     try:
-        httpserver.serve(app, host=sys.argv[1], port=sys.argv[2])
+        httpserver.serve(app, host=host, port=port)
     except SocketError:
         print 'Error: Failed to start webserver at http://%s:%s'%(sys.argv[1], sys.argv[2])
         exit(-1)
