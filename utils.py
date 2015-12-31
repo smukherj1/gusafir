@@ -24,7 +24,7 @@ class CLogger:
 
 	@classmethod
 	def timestr(cln):
-		msg = '[' + datetime.datetime.today().strftime('%a %b %d %l:%M:%S %p') + ']'
+		msg = '[' + datetime.datetime.today().strftime('%a %b %d %I:%M:%S %p') + ']'
 		return msg
 
 	def debug(self, msg, *args, **kwargs):

@@ -52,6 +52,7 @@ function device_load_submit () {
 		else if(xhttp.readyState == 4)
 		{
 			alert("Server indicated that it failed to load the device :(");
+			window.location.href = "/";
 		}
   	}
   	xhttp.open("POST", "/", true);
