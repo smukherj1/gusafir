@@ -29,41 +29,9 @@ tr:hover {
 }
 
 </style>
-<script>
-
-function fanin_check(cb)
-{
-  var obj = document.getElementById("fanin_table");
-  if(cb.checked)
-  {
-    obj.style.visibility = "visible";
-    obj.style.height = "";
-  }
-  else
-  {
-    obj.style.visibility = "collapse";
-    obj.style.height = "0px";
-  }
-}
-
-function fanout_check(cb)
-{
-  var obj = document.getElementById("fanout_table");
-  if(cb.checked)
-  {
-    obj.style.visibility = "visible";
-    obj.style.height = "";
-  }
-  else
-  {
-    obj.style.visibility = "collapse";
-    obj.style.height = "0px";
-  }
-}
-
-</script>
+<script type="text/javascript" src="show.js"></script>
 </head>
-<body>
+<body onload="users_opts()">
 	<h1>Welcome to Gusafir 2.0</h1>
 	<p>Quartus Build: {{ acds_dest_root }}</p>
   <p> Device: {{ part }}</p>
@@ -107,7 +75,7 @@ function fanout_check(cb)
 	<h2>With the following connectivity</h2>
 	<div class="node-list">
 		{% if num_fanouts %}
-		<h3><input type="checkbox" onclick="fanout_check(this);" checked>Fanouts ({{ num_fanouts }}):-</h3>
+		<h3><input id="fanout_cbox" type="checkbox" onclick="fanout_check(this);">Fanouts ({{ num_fanouts }}):-</h3>
       <div id="fanout_table">
 			<table>
 				<tr style="background-color: #4CAF50;color: white">
@@ -142,7 +110,7 @@ function fanout_check(cb)
 	</div>
 	<div class="node-list">
 		{% if num_fanins %}
-		<h3><input type="checkbox" onclick="fanin_check(this);" checked>Fanins ({{ num_fanins }}):-</h3>
+		<h3><input id="fanin_cbox" type="checkbox" onclick="fanin_check(this);">Fanins ({{ num_fanins }}):-</h3>
       <div id="fanin_table">
 			<table>
 				<tr style="background-color: #4CAF50;color: white">
