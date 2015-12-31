@@ -9,12 +9,10 @@ from paste.cascade import Cascade
 from socket import error as SocketError
 import os
 import urllib
-import logging
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _global_Device = DeviceInterface()
-_log = logging.getLogger(__name__)
-logging.basicConfig(format='[%(asctime)s][%(levelname)s]   %(message)s', level=logging.INFO)
+_log = CLogger(__name__)
 TEST_PAGE = 'test'
 
 class ElemsList(Handler):
@@ -72,6 +70,7 @@ class NodePage(Handler):
                     num_fanouts=len(node.fanouts()))
 
         error = urllib.urlencode({'error' : 'Could not find that node!'})
+        _log.warning('Could not find requested node')
         return self.redirect('/?' + error)
 
 class MainPage(Handler):
@@ -132,7 +131,7 @@ def main():
     try:
         httpserver.serve(app, host=host, port=port)
     except SocketError:
-        _log.error('Failed to start webserver at http://%s:%s'%(host, port))
+        _log.critical('Failed to start webserver at http://%s:%s'%(host, port))
         exit(-1)
 
 if __name__ == '__main__':

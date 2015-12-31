@@ -5,15 +5,14 @@ import os
 import urllib2
 import uuid
 import atexit
-import logging
+import utils
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 SERVER_SCRIPT = os.path.join(SCRIPT_DIR, 'gusafir_server.py')
 HOST = '0.0.0.0'
 PORT = 8080
 TEST_PAGE = str(uuid.uuid1())
-_log = logging.getLogger(__name__)
-logging.basicConfig(format='[%(asctime)s][%(levelname)s]   %(message)s', level=logging.INFO)
+_log = utils.CLogger(__name__)
 
 if __name__ == '__main__':
     _log.info('Welcome to Gusafir 2.0')
