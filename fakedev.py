@@ -27,18 +27,20 @@ def genNodes(rows, cols):
 
 def genConnectivity(rows, cols):
 	idx = -1
+	dist = 4
 	for ir in range(rows):
 		for ic in range(cols):
 			for itype in NODE_TYPES:
 				idx += 1
-				if ir > 0:
-					_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir - 1][ic][itype])
-				if ir < (rows - 1):
-					_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir + 1][ic][itype])
-				if ic > 0:
-					_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir][ic - 1][itype])
-				if ic < (cols - 1):
-					_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir][ic + 1][itype])
+				for idist in range(1, dist + 1):
+					if ir >= idist:
+						_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir - idist][ic][itype])
+					if ir < (rows - idist):
+						_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir + idist][ic][itype])
+					if ic >= idist:
+						_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir][ic - idist][itype])
+					if ic < (cols - idist):
+						_global_Nodes[idx]["fanouts"].append(_global_coord_idx_map[ir][ic + idist][itype])
 				_global_Nodes[idx]["fanins"] = _global_Nodes[idx]["fanouts"]
 	return
 

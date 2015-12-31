@@ -25,6 +25,12 @@ function device_select () {
 	}
 }
 
+function load_animation (part) {
+	var msg = "<p>Loading " + part + ". This may take a minute or two. The page will automatically refresh when done</p>";
+	var loader_body = document.getElementById("loader_body");
+	loader_body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
+}
+
 function device_load_submit () {
 	var part_select = document.getElementById("part_select");
 	var index = part_select.selectedIndex;
@@ -36,7 +42,7 @@ function device_load_submit () {
 
 	var part = part_select.options[index].text;
 
-	var msg = "<p>Loading " + part + ". This may take a minute or two. The page will automatically refresh when done</p>";
+
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200)
@@ -51,9 +57,7 @@ function device_load_submit () {
   	xhttp.open("POST", "/", true);
   	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   	xhttp.send("part=" + part);
-
-  	var loader_body = document.getElementById("loader_body");
-  	loader_body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
+		load_animation(part);
 
 }
 
@@ -65,7 +69,6 @@ function part_load_submit () {
 		return;
 	}
 
-	var msg = "<p>Loading " + part + ". This may take a minute or two. The page will automatically refresh when done</p>";
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200)
@@ -81,6 +84,5 @@ function part_load_submit () {
   	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   	xhttp.send("part=" + part);
 
-  	var loader_body = document.getElementById("loader_body");
-  	loader_body.innerHTML = msg + "<div class=\"spinner-loader\">_Patience_</div>";
+  	load_animation(part);
 }

@@ -8,6 +8,7 @@ from paste.urlparser import StaticURLParser
 from paste.cascade import Cascade
 from socket import error as SocketError
 import os
+import urllib
 import logging
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -42,7 +43,9 @@ class NodePage(Handler):
         gid = str(self.request.get('gid')).strip()
         if gid and gid.isdigit():
             node = _global_Device.getNode(int(gid))
-            return self.render('show.html', node=node,
+            return self.render('show.html',
+                part=_global_Device.part(),
+                node=node,
                 num_fanins=len(node.fanins()),
                 num_fanouts=len(node.fanouts()))
 
@@ -62,23 +65,28 @@ class NodePage(Handler):
                 int(z),
                 int(i))
             if node:
-                return self.render('show.html', node=node,
+                return self.render('show.html',
+                    part=_global_Device.part(),
+                    node=node,
                     num_fanins=len(node.fanins()),
                     num_fanouts=len(node.fanouts()))
 
-        return self.render('node.html', error_header='Could not find that node',
-            elem_list = _global_Device.getElems())
+        error = urllib.urlencode({'error' : 'Could not find that node!'})
+        return self.redirect('/?' + error)
 
 class MainPage(Handler):
     def renderDeviceLoader(self):
         pdevice_map = _global_Device.getDeviceMap()
         pdevice_map_str = json.dumps(pdevice_map)
-        return self.render('device.html', 
+        return self.render('device.html',
             device_map = pdevice_map,
             device_map_str = pdevice_map_str)
 
     def renderNewNode(self):
+        error_header = self.request.get('error')
         return self.render('node.html',
+            part=_global_Device.part(),
+            error_header=error_header,
             elem_list = _global_Device.getElems())
 
     def get(self):

@@ -12,7 +12,7 @@ table {
 
 th {
     height: 50px;
-} 
+}
 
 
 th, td {
@@ -24,11 +24,49 @@ tr:hover {
 	background-color: #f5f5f5;
 }
 
+.fanout_table, .fanin_table {
+  -webkit-transform: scale3d(1,1,1);
+}
+
 </style>
+<script>
+
+function fanin_check(cb)
+{
+  var obj = document.getElementById("fanin_table");
+  if(cb.checked)
+  {
+    obj.style.visibility = "visible";
+    obj.style.height = "";
+  }
+  else
+  {
+    obj.style.visibility = "collapse";
+    obj.style.height = "0px";
+  }
+}
+
+function fanout_check(cb)
+{
+  var obj = document.getElementById("fanout_table");
+  if(cb.checked)
+  {
+    obj.style.visibility = "visible";
+    obj.style.height = "";
+  }
+  else
+  {
+    obj.style.visibility = "collapse";
+    obj.style.height = "0px";
+  }
+}
+
+</script>
 </head>
 <body>
 	<h1>Welcome to Gusafir 2.0</h1>
 	<p>Quartus Build: {{ acds_dest_root }}</p>
+  <p> Device: {{ part }}</p>
 	<div class="error-header">{{ error_header }}</div>
 	<div class="top-nav">
 		<a href="/">Click here to start traversing another Node</a>
@@ -69,7 +107,8 @@ tr:hover {
 	<h2>With the following connectivity</h2>
 	<div class="node-list">
 		{% if num_fanouts %}
-		<h3>Fanouts ({{ num_fanouts }}):-<h3>
+		<h3><input type="checkbox" onclick="fanout_check(this);" checked>Fanouts ({{ num_fanouts }}):-</h3>
+      <div id="fanout_table">
 			<table>
 				<tr style="background-color: #4CAF50;color: white">
 					<td>
@@ -96,13 +135,15 @@ tr:hover {
 				</tr>
 				{% endfor %}
 			</table>
+      </div>
 		{% else %}
 		<h3>No fanouts!</h3>
 		{% endif %}
 	</div>
 	<div class="node-list">
 		{% if num_fanins %}
-		<h3>Fanins ({{ num_fanins }}):-<h3>
+		<h3><input type="checkbox" onclick="fanin_check(this);" checked>Fanins ({{ num_fanins }}):-</h3>
+      <div id="fanin_table">
 			<table>
 				<tr style="background-color: #4CAF50;color: white">
 					<td>
@@ -129,6 +170,7 @@ tr:hover {
 				</tr>
 				{% endfor %}
 			</table>
+      </div>
 		{% else %}
 		<h3>No fanins!</h3>
 		{% endif %}

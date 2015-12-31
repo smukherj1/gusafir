@@ -66,13 +66,16 @@ class DeviceInterface:
 			_device_loader_lock.release()
 		return
 
+	def part(self):
+		return self.__part
+
 	def loaded(self):
 		return self.__loaded
 
 	def getDeviceMap(self):
 		return {
 			"Family 1" : ["F1Device 1", "F1Device 2"],
-			"Family 2" : ["F2Device 1", "F2Device 2"],		
+			"Family 2" : ["F2Device 1", "F2Device 2"],
 		}
 
 	def getElems(self):
@@ -91,6 +94,7 @@ class DeviceInterface:
 			if z not in locs[x][y]:
 				locs[x][y][z] = []
 			locs[x][y][z].append(i)
+		time.sleep(2)
 		return locs
 
 	def lookup(self, elem, x, y, z, i):

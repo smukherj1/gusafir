@@ -7,6 +7,8 @@ function clear_x() {
 	{
 		select.remove(0);
 	}
+	var x_spinner = document.getElementById("x_spinner");
+	x_spinner.style.visibility = "visible";
 
 }
 
@@ -17,6 +19,9 @@ function clear_y() {
 		select.remove(0);
 	}
 
+	var y_spinner = document.getElementById("y_spinner");
+	y_spinner.style.visibility = "visible";
+
 }
 
 function clear_z() {
@@ -26,6 +31,9 @@ function clear_z() {
 		select.remove(0);
 	}
 
+	var z_spinner = document.getElementById("z_spinner");
+	z_spinner.style.visibility = "visible";
+
 }
 
 function clear_i() {
@@ -34,6 +42,9 @@ function clear_i() {
 	{
 		select.remove(0);
 	}
+
+	var i_spinner = document.getElementById("i_spinner");
+	i_spinner.style.visibility = "visible";
 
 }
 
@@ -50,6 +61,10 @@ function elem_populate(xhttp) {
 		option.value = coords[i];
 		select.add(option);
 	}
+
+	var x_spinner = document.getElementById("x_spinner");
+	x_spinner.style.visibility = "hidden";
+
 	x_selectcb();
 }
 
@@ -109,6 +124,9 @@ function x_selectcb () {
 		y_select.add(option);
 	}
 
+	var y_spinner = document.getElementById("y_spinner");
+	y_spinner.style.visibility = "hidden";
+
 	y_selectcb();
 }
 
@@ -138,6 +156,9 @@ function y_selectcb () {
 		option.value = z_coords[i];
 		z_select.add(option);
 	}
+
+	var z_spinner = document.getElementById("z_spinner");
+	z_spinner.style.visibility = "hidden";
 
 	z_selectcb();
 }
@@ -171,6 +192,9 @@ function z_selectcb () {
 		option.value = i_coords[i];
 		i_select.add(option);
 	}
-	
+
+	var i_spinner = document.getElementById("i_spinner");
+	i_spinner.style.visibility = "hidden";
+
 
 }
