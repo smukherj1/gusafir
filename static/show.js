@@ -21,25 +21,35 @@ function users_opts()
   var fanin = getCookie("fanin");
   var fanout = getCookie("fanout");
 
-  if(fanin == "off")
+  var fanin_cbox = document.getElementById("fanin_cbox");
+  var fanout_cbox = document.getElementById("fanout_cbox");
+
+  if(fanin_cbox && fanin == "off")
   {
-    document.getElementById("fanin_cbox").checked = false;
+    fanin_cbox.checked = false;
   }
-  else
+  else if(fanin_cbox)
   {
-    document.getElementById("fanin_cbox").checked = true;
+    fanin_cbox.checked = true;
   }
-  if(fanout == "off")
+  if(fanout_cbox && fanout == "off")
   {
-    document.getElementById("fanout_cbox").checked = false;
+    fanout_cbox.checked = false;
   }
-  else
+  else if(fanout_cbox)
   {
-    document.getElementById("fanout_cbox").checked = true;
+    fanout_cbox.checked = true;
   }
 
-  fanin_check(document.getElementById("fanin_cbox"));
-  fanout_check(document.getElementById("fanout_cbox"));
+  if(fanin_cbox)
+  {
+    fanin_check(fanin_cbox);
+  }
+
+  if(fanout_cbox)
+  {
+    fanout_check(fanout_cbox);
+  }
 }
 
 
